@@ -1,1 +1,3 @@
-// pending to impl
+import { initServer } from '../serverConfig';
+
+initServer();
