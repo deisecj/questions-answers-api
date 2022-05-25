@@ -1,6 +1,7 @@
 import { User } from "../models/user";
 import { DbClient } from "../persistence/dbClient";
 import bcrypt from "bcrypt"
+import { BusinessError } from "../errors";
 
 export class UserRepository {
 
@@ -22,5 +23,16 @@ export class UserRepository {
             .then(resolve)
             .catch(reject);
         });
+    }
+
+    findUser(email: string): Promise<User | undefined> {
+        return this.dbClient.query("SELECT * FROM USERS WHERE EMAIL = ?", email).then((results) => {
+            if (results.length > 0) {
+               const result = results[0];
+               const userFound = new User({ email: result.EMAIL, password: result.PASSWORD });
+               userFound.id = result.ID;
+               return userFound;
+            } 
+         });       
     }
 }
