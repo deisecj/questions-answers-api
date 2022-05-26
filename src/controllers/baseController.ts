@@ -1,4 +1,4 @@
-import e, { Response } from "express";
+import { Response } from "express";
 import { BusinessError } from "../errors";
 
 export class BaseController {
