@@ -51,6 +51,7 @@ describe('User API', () => {
                     .send({ email, password })
                     .expect('Content-Type', /json/)
                     .expect(400)
+                    .then((response) => expect(response.body).to.deep.equal({ message: "user already exist" }))
                 });
             });
 
@@ -77,7 +78,8 @@ describe('User API', () => {
                     .send({ email, password })
                     .expect('Content-Type', /json/)
                     .expect(400)
-                    .then((response) => expect(response.body).to.deep.equals(['email format is invalid', 'your password must be have at least: 8 characters long, 1 uppercase, 1 lowercase character and 1 number']))
+                    .then((response) => expect(response.body).to.deep.equals(['email format is invalid', 
+                    'your password must be have at least: 8 characters long, 1 uppercase, 1 lowercase character and 1 number']))
                 });
             });
             describe('request send email empty', () => {
@@ -130,7 +132,8 @@ describe('User API', () => {
                     .send({ email, password })
                     .expect('Content-Type', /json/)
                     .expect(400)
-                    .then((response) => expect(response.body).to.deep.equals(['your password must be have at least: 8 characters long, 1 uppercase, 1 lowercase character and 1 number']))
+                    .then((response) => expect(response.body).to.deep
+                    .equals(['your password must be have at least: 8 characters long, 1 uppercase, 1 lowercase character and 1 number']))
                 });
             });
             describe('request send password less minimum length', () => {
@@ -143,7 +146,8 @@ describe('User API', () => {
                     .send({ email, password })
                     .expect('Content-Type', /json/)
                     .expect(400)
-                    .then((response) => expect(response.body).to.deep.equals(['your password must be have at least: 8 characters long, 1 uppercase, 1 lowercase character and 1 number']))
+                    .then((response) => expect(response.body).to.deep
+                    .equals(['your password must be have at least: 8 characters long, 1 uppercase, 1 lowercase character and 1 number']))
                 });
             });
 
@@ -163,7 +167,7 @@ describe('User API', () => {
         });
     });
 
-    describe('SignIn User', () => {
+   /* describe('SignIn User', () => {
         describe('Request success', () => {
             it('should returns message to user logged with success', () => {
 
@@ -211,5 +215,5 @@ describe('User API', () => {
                 });
             });
         });
-    });
+    }); */
 });

@@ -2,7 +2,7 @@ import express, { Express, Request, Response } from "express";
 import { HelloController } from "./controllers/helloController";
 import { UserController } from "./controllers/userController";
 import getClient from "./persistence/dbClient";
-import { UserRepository } from "./repository/userRepository";
+import { UserRepository } from "./repositories/userRepository";
 
 export const initServer = (): Express => {
     const app = express();
