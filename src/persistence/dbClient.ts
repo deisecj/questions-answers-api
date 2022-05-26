@@ -1,4 +1,4 @@
-import mysql, { Pool } from 'mysql';
+import mysql, { Pool } from 'mysql2';
 
 export class DbClient {
 
@@ -14,7 +14,7 @@ export class DbClient {
         });
     }
 
-    public query(query: string, params?: any): Promise<any[]> {
+    public query(query: string, params?: any): Promise<any> {
        return new Promise((resolve, reject) => {
             this.getConnection().query(query, params, (err, results) => {
                 if (err) {
