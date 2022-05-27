@@ -1,6 +1,6 @@
 export class Validations {
 
-    validateEmailPassword(email: string, password: string): Promise<Array<String>> {
+    validateSignUp(email: string, password: string): Promise<Array<String>> {
       
         const emailFormat = new RegExp(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/);
         const strongPassword = new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{8,})");
@@ -22,7 +22,25 @@ export class Validations {
                 errors.push("your password must be have at least: 8 characters long, 1 uppercase, 1 lowercase character and 1 number"); 
             }
             resolve(errors);
+        });               
+    }
+
+    validateSignIn(email: string, password: string): Promise<Array<String>> {
+        return new Promise((resolve, reject) => {
+            try {
+                let errors: Array<String> = [];
+
+                if (email === '') {  
+                    errors.push("email is required");
+                }
+
+                if (password === '') {
+                    errors.push("password is required");
+                }
+                resolve(errors);
+            } catch (e) {
+                reject(e);
+            }
         });
-                 
     }
 }
