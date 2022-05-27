@@ -13,12 +13,11 @@ export class UserRepository {
     }
 
     save(user: User): Promise<void> {
-          return HashPassword.generateHashPassword(user.password || '').then((passwordCrypted) => {
+        return HashPassword.generateHashPassword(user.password).then((passwordCrypted) => {
             user.password = passwordCrypted;
             const values = [user.email, user.password];
             return this.dbClient.query("INSERT INTO USERS (EMAIL, PASSWORD) VALUES (?, ?)", values)
-          })
-       
+        });      
     }
 
     findUserbyEmail(email: string): Promise<User | undefined> {
@@ -28,7 +27,7 @@ export class UserRepository {
                const userFound = new User({ email: result.EMAIL, password: result.PASSWORD, id: result.id });
                return userFound;
             } 
-         });       
+        });       
     }
 
     getByEmail(email: string): Promise<User> {

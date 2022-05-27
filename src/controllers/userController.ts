@@ -4,7 +4,7 @@ import { Validations } from '../validations';
 import { UserRepository } from '../repositories/userRepository';
 import { AuthenticationRepository } from '../repositories/authenticationRepository';
 import { BaseController } from './baseController';
-import { BusinessError, RecordNotFoundError } from '../errors';
+import { RecordNotFoundError } from '../errors';
 
 const checkRequest = new Validations();
 
@@ -27,9 +27,8 @@ export class UserController extends BaseController {
             if (errors.length === 0) {
                 return this.userRepository.findUserbyEmail(email)
                 .then((user) => {
-                    console.log("ksdddd user", user)
                     if (user) {
-                        res.status(400).json({ message: "user already exist" });
+                        res.status(400).json({ message: "user already exists" });
                     } else {
                         const user = new User({ email: email, password: password });
                         return this.userRepository.save(user)
@@ -44,8 +43,6 @@ export class UserController extends BaseController {
 
     signIn(req: Request, res: Response) {
         const { email, password } = req.body;
-
-        console.log("valores enviados no reques teste", {email, password})
 
         checkRequest.validateSignIn(email, password)
         .then((errors) => {

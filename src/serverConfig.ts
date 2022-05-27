@@ -21,7 +21,7 @@ export const initServer = (): Express => {
         return userController.signUp(req, res);
     });
 
-    app.get('/api/user/signin', (req: Request, res: Response) => {
+    app.post('/api/user/signin', (req: Request, res: Response) => {
         return userController.signIn(req, res);
     });
 

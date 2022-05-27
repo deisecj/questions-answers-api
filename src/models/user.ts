@@ -8,24 +8,17 @@ export class User {
     password: string;
     id: number;
 
-    constructor(userAttributes: any) {
-       this.email = userAttributes.email;
-       this.password = userAttributes.password;
-       this.id = userAttributes.id;
+    constructor(attributes: any) {
+       this.email = attributes.email;
+       this.password = attributes.password;
+       this.id = attributes.id;
     }
 
     signIn(password: string): Promise<Authentication> {
-        return bcrypt.compare(password, this.password).then((validPassword) => {
-
-            console.log("result comparacao password", validPassword)
-            
+        return bcrypt.compare(password, this.password).then((validPassword) => {            
             if (validPassword) {
-                const auth = new Authentication(this.email);
-
-                console.log("resultado da criacao da auth", auth)
-                
+                const auth = new Authentication({ email: this.email });
                 return auth;
-
             } else {
                 throw new BusinessError ("email or password is invalid")
             } 

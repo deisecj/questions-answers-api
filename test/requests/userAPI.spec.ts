@@ -2,7 +2,7 @@ import { expect } from 'chai';
 import request from 'supertest';
 import { User } from '../../src/models/user';
 import { buildUser, persistUser } from '../fixtures';
-import { totalAuthByemail, totalUserByemail } from '../support/dbUtils';
+import { totalAuthByEmail, totalUserByEmail } from '../support/dbUtils';
 import { expressApp, resetTables } from "../support/init";
 
 describe('User API', () => {
@@ -26,8 +26,8 @@ describe('User API', () => {
                 .expect('Content-Type', /json/)
                 .expect(200)
                 .then((response) => { 
-                    expect(response.body).to.deep.equal({ message: "user created with success" });
-                    totalUserByemail(email).then((total) => expect(total).to.equal(1));
+                   expect(response.body).to.deep.equal({ message: "user created with success" });
+                   totalUserByEmail(email).then((total) => expect(total).to.equal(1));
                 });
             });
         });
@@ -51,7 +51,7 @@ describe('User API', () => {
                     .send({ email, password })
                     .expect('Content-Type', /json/)
                     .expect(400)
-                    .then((response) => expect(response.body).to.deep.equal({ message: "user already exist" }))
+                    .then((response) => expect(response.body).to.deep.equal({ message: "user already exists" }))
                 });
             });
 
@@ -197,12 +197,12 @@ describe('User API', () => {
                 const password = user.password;
 
                 return request(expressApp)
-                .get('/api/user/signin')
+                .post('/api/user/signin')
                 .send({ email, password })
                 .expect('Content-Type', /json/)
                 .expect(200)
                 .then(() => {
-                    totalAuthByemail(email).then((total)=> {
+                   totalAuthByEmail(email).then((total)=> {
                         expect(total).to.be.equal(1);
                     });
                 });
@@ -216,7 +216,7 @@ describe('User API', () => {
                     const password = "1234Abcd";
 
                     return request(expressApp)
-                    .get('/api/user/signin')
+                    .post('/api/user/signin')
                     .send({ email, password })
                     .expect('Content-Type', /json/)
                     .expect(400)
@@ -230,7 +230,7 @@ describe('User API', () => {
                     const password = "";
 
                     return request(expressApp)
-                    .get('/api/user/signin')
+                    .post('/api/user/signin')
                     .send({ email, password })
                     .expect('Content-Type', /json/)
                     .expect(400)
@@ -244,7 +244,7 @@ describe('User API', () => {
                     const password = "1234Abcde";
 
                     return request(expressApp)
-                    .get('/api/user/signin')
+                    .post('/api/user/signin')
                     .send({ email, password })
                     .expect('Content-Type', /json/)
                     .expect(400)
@@ -258,7 +258,7 @@ describe('User API', () => {
                     const password = "";
 
                     return request(expressApp)
-                    .get('/api/user/signin')
+                    .post('/api/user/signin')
                     .send({ email, password })
                     .expect('Content-Type', /json/)
                     .expect(400)
@@ -279,7 +279,7 @@ describe('User API', () => {
                     const password = "1234Abcde";
 
                     return request(expressApp)
-                    .get('/api/user/signin')
+                    .post('/api/user/signin')
                     .send({ email, password })
                     .expect('Content-Type', /json/)
                     .expect(400)
