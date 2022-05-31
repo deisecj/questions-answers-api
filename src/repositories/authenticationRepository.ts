@@ -23,7 +23,7 @@ export class AuthenticationRepository {
 
     findByToken(authToken: string): Promise<Authentication | undefined> {
         return this.dbClient
-            .query("SELECT * FROM AUTHENTICATIONS WHERE TOKEN = ?", authToken)
+            .query("SELECT * FROM AUTHENTICATIONS WHERE TOKEN = ? AND CREATED_AT > NOW() - INTERVAL 15 MINUTE", authToken)
             .then((results) => {
                 if (results.length > 0) {
                     const result = results[0];

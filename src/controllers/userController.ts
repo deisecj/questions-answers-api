@@ -13,10 +13,10 @@ export class UserController extends BaseController {
     userRepository: UserRepository;
     authenticationRepository: AuthenticationRepository;
 
-    constructor(userRepository: UserRepository, authencationRepository: AuthenticationRepository) {
-        super();
+    constructor(userRepository: UserRepository, authenticationRepository: AuthenticationRepository) {
+        super(authenticationRepository);
         this.userRepository = userRepository;
-        this.authenticationRepository = authencationRepository;
+        this.authenticationRepository = authenticationRepository;
     }
     
     signUp(req: Request, res: Response) {
