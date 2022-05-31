@@ -1,7 +1,6 @@
 import express, { Express, Request, Response } from "express";
 import { HelloController } from "./controllers/helloController";
 import { UserController } from "./controllers/userController";
-import { AuthenticationController } from "./controllers/authenticationController";
 import getClient from "./persistence/dbClient";
 import { UserRepository } from "./repositories/userRepository";
 import { AuthenticationRepository } from "./repositories/authenticationRepository";
@@ -17,7 +16,6 @@ export const initServer = (): Express => {
 
     const helloController = new HelloController();
     const userController = new UserController(userRepository, authenticationRepository);
-    const authController = new AuthenticationController(authenticationRepository);
 
     app.post('/api/user/signup', (req: Request, res: Response) => {
         return userController.signUp(req, res);
@@ -25,10 +23,6 @@ export const initServer = (): Express => {
 
     app.post('/api/user/signin', (req: Request, res: Response) => {
         return userController.signIn(req, res);
-    });
-
-    app.post('/api/auth/', (req: Request, res: Response) => {
-       return authController.validate(req, res);
     });
 
     app.get('/api/hello', (req: Request, res: Response) => {

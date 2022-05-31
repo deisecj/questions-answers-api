@@ -1,6 +1,6 @@
 import { DbClient } from "../persistence/dbClient";
 import { Authentication } from "../models/authentication";
-import { UnauthorizedError } from "../errors";
+import { RecordNotFoundError } from "../errors";
 
 export class AuthenticationRepository {
 
@@ -38,7 +38,7 @@ export class AuthenticationRepository {
             if (auth) {
                 return auth;
             } else {
-                throw new UnauthorizedError("authentication failed");
+                throw new RecordNotFoundError("authentication failed");
             }
         });
     }
