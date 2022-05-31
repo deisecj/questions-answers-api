@@ -1,5 +1,6 @@
 import { DbClient } from "../persistence/dbClient";
 import { Authentication } from "../models/authentication";
+import { RecordNotFoundError } from "../errors";
 
 export class AuthenticationRepository {
 
@@ -18,5 +19,27 @@ export class AuthenticationRepository {
             .then(() => resolve(auth))
             .catch(reject);
         });  
+    }
+
+    findByToken(authToken: string): Promise<Authentication | undefined> {
+        return this.dbClient
+            .query("SELECT * FROM AUTHENTICATIONS WHERE TOKEN = ?", authToken)
+            .then((results) => {
+                if (results.length > 0) {
+                    const result = results[0];
+                    const authFound = new Authentication({ email: result.EMAIL, token: result.TOKEN, createdAt: result.CREATED_AT });
+                    return authFound;
+                }
+            });
+    }
+
+    getByToken(authToken: string): Promise<Authentication> {
+        return this.findByToken(authToken).then((auth) => {
+            if (auth) {
+                return auth;
+            } else {
+                throw new RecordNotFoundError("authentication failed");
+            }
+        });
     }
 }
