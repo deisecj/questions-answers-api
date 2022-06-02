@@ -7,9 +7,8 @@ import getClient from '../../src/persistence/dbClient';
 export const dbClient = getClient();
 export const expressApp = initServer();
 
-export const resetTables = () => {
-    const user = dbClient.query("DELETE FROM USERS");
-    const auth = dbClient.query("DELETE FROM AUTHENTICATIONS");
-
-    return Promise.all([user, auth]);
+export const resetTables = async (): Promise<void> => {
+    const question = await dbClient.query("DELETE FROM QUESTIONS");
+    const user = await dbClient.query("DELETE FROM USERS");
+    const auth = await dbClient.query("DELETE FROM AUTHENTICATIONS");
 }

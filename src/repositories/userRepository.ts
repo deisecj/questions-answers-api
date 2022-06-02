@@ -24,7 +24,7 @@ export class UserRepository {
         return this.dbClient.query("SELECT * FROM USERS WHERE EMAIL = ?", email).then((results) => {
             if (results.length > 0) {
                const result = results[0];
-               const userFound = new User({ email: result.EMAIL, password: result.PASSWORD, id: result.id });
+               const userFound = new User({ email: result.EMAIL, password: result.PASSWORD, id: result.ID });
                return userFound;
             } 
         });       

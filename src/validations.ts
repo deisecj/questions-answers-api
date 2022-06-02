@@ -47,4 +47,23 @@ export class Validations {
             }
         });
     }
+
+    validateQuestion(title: string, description: string): Promise<Array<String>> {
+        return new Promise((resolve, reject) => {
+            try {
+                let errors: Array<String> = [];
+
+                if (title === '') {  
+                    errors.push("title is required");
+                }
+
+                if (description === '') {
+                    errors.push("description is required");
+                }
+                resolve(errors);
+            } catch (e) {
+                reject(e);
+            }
+        });
+    }
 }

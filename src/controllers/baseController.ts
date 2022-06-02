@@ -22,7 +22,7 @@ export class BaseController {
         }
     }
 
-    validate(req: Request): Promise<Authentication> {
+    validateToken(req: Request): Promise<Authentication> {
         const authToken = req.headers.authorization;
         
         if (authToken) {

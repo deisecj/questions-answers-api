@@ -33,3 +33,11 @@ export const persistAuth = (auth: Authentication): Promise<Authentication> => {
                        return auth;
                    });
 }
+
+export const buildExpiredAuth =  (user: User): Authentication => {
+    const auth = new Authentication({ email: user.email });
+    const expiredDate = new Date();
+    expiredDate.setMinutes(expiredDate.getMinutes() - 16);
+    auth.createdAt = expiredDate;
+    return auth;
+}

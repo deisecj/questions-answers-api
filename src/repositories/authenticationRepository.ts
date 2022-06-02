@@ -27,7 +27,7 @@ export class AuthenticationRepository {
             .then((results) => {
                 if (results.length > 0) {
                     const result = results[0];
-                    const authFound = new Authentication({ email: result.EMAIL, token: result.TOKEN, createdAt: result.CREATED_AT });
+                    const authFound = new Authentication({ email: result.EMAIL, token: result.TOKEN, createdAt: result.CREATED_AT, id: result.ID});
                     return authFound;
                 }
             });
