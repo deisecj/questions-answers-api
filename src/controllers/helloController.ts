@@ -5,10 +5,10 @@ class HelloController {
     
     hello(req: Request, res: Response) {
         const dbClient = getClient();
-
+        
         dbClient.query("SELECT 1").then(() => {
-            res.json({ message: "hello!" })
-        })      
+           res.json({ message: "hello!" })
+        });
     }
 }
 
