@@ -3,6 +3,7 @@ import { faker } from '@faker-js/faker';
 import { dbClient } from "../support/init";
 import { HashPassword } from "../../src/utils/hashPassword";
 import { Authentication } from "../../src/models/authentication";
+import { Question } from "../../src/models/question";
 
 export const buildUser = (): User => {
     const user = new User({ email: faker.internet.email(), password: faker.internet.password() });
@@ -40,4 +41,18 @@ export const buildExpiredAuth =  (user: User): Authentication => {
     expiredDate.setMinutes(expiredDate.getMinutes() - 16);
     auth.createdAt = expiredDate;
     return auth;
+}
+
+export const buildQuestion = (user: User): Question => {
+    const question = new Question({ title: faker.hacker.phrase(), description: faker.lorem.paragraph(), user: user });
+    return question;
+}
+
+export const persistQuestion = (question: Question): Promise<Question> => {
+    return dbClient.query("INSERT INTO QUESTIONS (TITLE, DESCRIPTION, CREATED_AT, USER_ID) VALUES (?, ?, ?, ?)", 
+                          [question.title, question.description, question.createdAt, question.user.id])
+                   .then((out: any) => {
+                    question.id = out.insertId;
+                       return question;
+                   });
 }

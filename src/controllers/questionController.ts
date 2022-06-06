@@ -39,4 +39,11 @@ export class QuestionController extends BaseController {
             });
         }).catch((error) => super.handleErrors(res, error));   
     }
+
+    show(req: Request, res: Response) {
+        return this.questionRepository.findAll()
+        .then((questions) => {
+                res.json(questions);
+         }).catch((error) => super.handleErrors(res, error));
+    }
 }
