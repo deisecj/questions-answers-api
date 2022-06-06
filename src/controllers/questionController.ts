@@ -44,8 +44,6 @@ export class QuestionController extends BaseController {
         return this.questionRepository.findAll()
         .then((questions) => {
                 res.json(questions);
-         }).catch((error) => { 
-              super.handleErrors(res, error)
-         });
+         }).catch((error) => super.handleErrors(res, error));
     }
 }
