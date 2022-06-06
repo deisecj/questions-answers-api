@@ -1,8 +1,11 @@
-import { expect } from 'chai';
+import { expect, use } from 'chai';
+import deepEqualInAnyOrder from 'deep-equal-in-any-order';
+use(deepEqualInAnyOrder);
 import request from 'supertest';
 import { Authentication } from "../../src/models/authentication";
+import { Question } from '../../src/models/question';
 import { User } from "../../src/models/user";
-import { buildAuth, buildExpiredAuth, buildUser, persistAuth, persistUser } from "../fixtures";
+import { buildAuth, buildExpiredAuth, buildQuestion, buildUser, persistAuth, persistQuestion, persistUser } from "../fixtures";
 import { totalQuestionByUser } from '../support/dbUtils';
 import { expressApp, resetTables } from "../support/init";
 
@@ -211,4 +214,45 @@ describe('Question API', () => {
             });
         });
     });
-})
+
+    describe('Shows questions', () => {
+        describe('send request to show questions', () => {
+            let user: User;
+            let questionsList: Array<Question> = [];
+
+                beforeEach(() => {
+                    return persistUser(buildUser()).then((userCreated) => {
+                        user = userCreated;
+                        return user;
+                    }).then((user) => {
+                        const promiseArrayList: Promise<Question>[] = [];
+                        for (let i = 0; i < 4; i++) {
+                            const questionCreated = persistQuestion(buildQuestion(user));
+                            promiseArrayList.push(questionCreated);
+                        }
+                        return Promise.all(promiseArrayList).then((questions) => {
+                            questionsList = questions;
+                            return questionsList;
+                        });
+                    });                 
+                });  
+
+            it('should returns all questions with title, description, created date and author', () => {
+                return request(expressApp)
+                .get('/api/questions/')
+                .expect('Content-Type', /json/)
+                .expect(200)
+                .then((response) => {
+                   const expectedList = questionsList.map((question) => ({ 
+                        title: question.title,
+                        description: question.description,
+                        createdAt: question.createdAt.toISOString(),
+                        id: question.id,
+                        user: { email: question.user.email, id: question.user.id }        
+                    }));
+                  expect(response.body).to.deep.equalInAnyOrder(expectedList)           
+                });
+            });
+        });
+    });
+});

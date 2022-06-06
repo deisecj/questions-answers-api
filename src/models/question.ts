@@ -11,7 +11,9 @@ export class Question {
     constructor(attributes: any) {
         this.title = attributes.title;
         this.description = attributes.description;
-        this.createdAt = attributes.createdAt || new Date();
+        const defaultDate = new Date();
+        defaultDate.setSeconds(0, 0); // remove ms
+        this.createdAt = attributes.createdAt || defaultDate;
         this.id = attributes.id;
         this.user = attributes.user;
     }
