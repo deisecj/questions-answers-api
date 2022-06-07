@@ -16,6 +16,8 @@ export class BaseController {
             res.status(400).json({ message: error.message });
         } else if (error instanceof UnauthorizedError) {
             res.status(401).json({ message: error.message }) ;
+        } else if (error instanceof RecordNotFoundError) {
+            res.status(404).json({ message: error.message }) ;
         } else {
             console.error("ERROR ON", error);
             res.status(500).json({ message: error.message });

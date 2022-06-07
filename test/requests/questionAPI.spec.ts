@@ -285,9 +285,9 @@ describe('Question API', () => {
                         expect(response.body.createdAt).to.deep.equal(question.createdAt.toISOString());
                         expect(response.body.user.id).to.deep.equal(question.user.id);
                         expect(response.body.user.email).to.deep.equal(question.user.email);          
-                    })
-            })
-        })
+                    });
+            });
+        });
 
         describe('send request to show questions unexists', () => {
             it('should returns a question with title, description, created date and author', () => {
@@ -296,11 +296,11 @@ describe('Question API', () => {
                 return request(expressApp)
                     .get('/api/question/' + questionId)
                     .expect('Content-Type', /json/)
-                    .expect(400)
+                    .expect(404)
                     .then((response) => {
                         expect(response.body).to.deep.equal({ message: "question not found!" });
-                    })
-            })
-        })
-    })
+                    });
+            });
+        });
+    });
 });

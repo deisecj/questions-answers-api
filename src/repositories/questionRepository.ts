@@ -1,5 +1,5 @@
 import { QuestionController } from "../controllers/questionController";
-import { BusinessError } from "../errors";
+import { BusinessError, RecordNotFoundError } from "../errors";
 import { Question } from "../models/question";
 import { User } from "../models/user";
 import { DbClient } from "../persistence/dbClient";
@@ -52,7 +52,7 @@ export class QuestionRepository {
             if (question) {
                 return question;
             } else {
-                throw new BusinessError("question not found!")
+                throw new RecordNotFoundError("question not found!")
             }
         });
     }
