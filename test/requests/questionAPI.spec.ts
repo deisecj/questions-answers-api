@@ -250,9 +250,57 @@ describe('Question API', () => {
                         id: question.id,
                         user: { email: question.user.email, id: question.user.id }        
                     }));
-                  expect(response.body).to.deep.equalInAnyOrder(expectedList)           
+                  expect(response.body).to.deep.equalInAnyOrder(expectedList);       
                 });
             });
         });
     });
+    
+    describe('Shows question details', () => {
+        describe('send request to show questions details', () => {
+            let user: User;
+            let question: Question;
+
+                beforeEach(() => {
+                    return persistUser(buildUser()).then((userCreated) => {
+                        user = userCreated;
+                        return user;
+                    }).then((user) => {
+                        return persistQuestion(buildQuestion(user)).then((questionCreated) => {
+                            question = questionCreated;
+                            return question;
+                        });
+                     });
+                });
+
+            it('should returns a question with title, description, created date and author', () => {
+                return request(expressApp)
+                    .get('/api/question/' + question.id)
+                    .expect('Content-Type', /json/)
+                    .expect(200)
+                    .then((response) => {
+                        expect(response.body.id).to.deep.equal(question.id);
+                        expect(response.body.title).to.deep.equal(question.title);
+                        expect(response.body.description).to.deep.equal(question.description);
+                        expect(response.body.createdAt).to.deep.equal(question.createdAt.toISOString());
+                        expect(response.body.user.id).to.deep.equal(question.user.id);
+                        expect(response.body.user.email).to.deep.equal(question.user.email);          
+                    })
+            })
+        })
+
+        describe('send request to show questions unexists', () => {
+            it('should returns a question with title, description, created date and author', () => {
+                const questionId = 2;
+
+                return request(expressApp)
+                    .get('/api/question/' + questionId)
+                    .expect('Content-Type', /json/)
+                    .expect(400)
+                    .then((response) => {
+                        expect(response.body).to.deep.equal({ message: "question not found!" });
+                    })
+            })
+        })
+    })
 });

@@ -37,6 +37,10 @@ export const initServer = (): Express => {
         return questionController.show(req, res);
     });
 
+    app.get('/api/question/:id', (req: Request, res: Response) => {
+        return questionController.showDetails(req, res);
+    });
+
     app.get('/api/hello', (req: Request, res: Response) => {
         return helloController.hello(req, res);
     });

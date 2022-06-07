@@ -46,4 +46,12 @@ export class QuestionController extends BaseController {
                 res.json(questions);
          }).catch((error) => super.handleErrors(res, error));
     }
+
+    showDetails(req: Request, res: Response) {
+        const questionID = parseInt(req.params.id);
+          return this.questionRepository.getByID(questionID)
+          .then((question) => {
+                  res.json(question);
+           }).catch((error) => super.handleErrors(res, error));
+    }
 }
