@@ -40,7 +40,7 @@ describe('Question API', () => {
                 .expect('Content-Type', /json/)
                 .expect(200)
                 .then((response) => { 
-                    totalQuestionByUser(user).then((total) => {
+                    return totalQuestionByUser(user).then((total) => {
                         expect(total).to.be.equal(1);
                         expect(response.body).to.deep.equal({ message: "question created with success" });
                     }); 

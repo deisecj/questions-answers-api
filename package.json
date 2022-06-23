@@ -6,7 +6,7 @@
   "scripts": {
     "build": "tsc",
     "test": "./node_modules/.bin/ts-mocha --timeout 30000 --exit -p tsconfig.json test/**/*.spec.ts",
-    "start": "node ./dist/bin/server.js"
+    "start": "node ./dist/src/bin/server.js"
   },
   "author": "",
   "license": "ISC",

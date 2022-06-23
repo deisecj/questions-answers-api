@@ -66,4 +66,19 @@ export class Validations {
             }
         });
     }
+
+    validateAnswer(description: string): Promise<Array<String>> {
+        return new Promise((resolve, reject) => {
+            try {
+                let errors: Array<String> = [];
+
+                if (description === '') {
+                    errors.push("description is required");
+                }
+                resolve(errors);
+            } catch (e) {
+                reject(e);
+            }
+        });
+    }
 }

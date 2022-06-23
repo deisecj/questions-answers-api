@@ -2,10 +2,12 @@ import express, { Express, Request, Response } from "express";
 import { HelloController } from "./controllers/helloController";
 import { UserController } from "./controllers/userController";
 import { QuestionController } from "./controllers/questionController";
+import { AnswerController } from "./controllers/answerController";
 import getClient from "./persistence/dbClient";
 import { UserRepository } from "./repositories/userRepository";
 import { AuthenticationRepository } from "./repositories/authenticationRepository";
 import { QuestionRepository } from "./repositories/questionRepository";
+import { AnswerRepository } from "./repositories/answerRepository";
 
 export const initServer = (): Express => {
     const app = express();
@@ -16,10 +18,12 @@ export const initServer = (): Express => {
     const userRepository = new UserRepository(dbClient);
     const authenticationRepository = new AuthenticationRepository(dbClient);
     const questionRepository = new QuestionRepository(dbClient);
+    const answerRepository = new AnswerRepository(dbClient);
 
     const helloController = new HelloController();
     const userController = new UserController(userRepository, authenticationRepository);
     const questionController = new QuestionController(authenticationRepository, questionRepository, userRepository);
+    const answerQuestionController = new AnswerController(authenticationRepository, userRepository, questionRepository, answerRepository);
 
     app.post('/api/user/signup', (req: Request, res: Response) => {
         return userController.signUp(req, res);
@@ -39,6 +43,10 @@ export const initServer = (): Express => {
 
     app.get('/api/question/:id', (req: Request, res: Response) => {
         return questionController.showDetails(req, res);
+    });
+    
+    app.post('/api/:idquestion/answer/', (req: Request, res: Response) => {
+        return answerQuestionController.create(req, res);
     });
 
     app.get('/api/hello', (req: Request, res: Response) => {
