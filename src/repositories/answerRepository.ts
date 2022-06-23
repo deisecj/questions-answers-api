@@ -1,3 +1,4 @@
+import { RecordNotFoundError } from "../errors";
 import { Answer } from "../models/answer";
 import { User } from "../models/user";
 import { DbClient } from "../persistence/dbClient";
@@ -21,8 +22,8 @@ export class AnswerRepository {
         });   
     }
 
-    findAll(): Promise<Array<Answer>> {
-        return this.dbClient.query("SELECT ANSWERS.*, USERS.EMAIL FROM ANSWERS INNER JOIN USERS ON ANSWERS.USER_ID = USERS.ID").then((results) => {
+    findByQuestion(questionID: number): Promise<Array<Answer>> {
+        return this.dbClient.query("SELECT ANSWERS.*, USERS.EMAIL FROM ANSWERS INNER JOIN USERS ON ANSWERS.USER_ID = USERS.ID WHERE QUESTION_ID=?", questionID).then((results) => {
             const answers: Array<Answer> = [];
             results.forEach((result: any) => {
                 const user = new User({ id: result.USER_ID, email: result.EMAIL })

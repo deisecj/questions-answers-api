@@ -195,14 +195,14 @@ describe('Answer API', () => {
                 });
             });
 
-            it.only('should returns the answers with description, created date and author', () => {
+            it('should returns the answers with description, created date and author', () => {
                 
                 return request(expressApp)
-                .get('/api/' + question.id + '/answers/')
+                .get('/api/question/' + question.id + '/answers/')
                 .expect('Content-Type', /json/)
                 .expect(200)
                 .then((response) => {
-                    const expectedList = answerList.map((answer) => ({ 
+                   const expectedList = answerList.map((answer) => ({ 
                         description: answer.description,
                         createdAt: answer.createdAt.toISOString(),
                         id: answer.id,

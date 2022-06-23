@@ -47,7 +47,9 @@ export class AnswerController extends BaseController {
     }
 
     show(req: Request, res: Response) {
-        return this.answerRepository.findAll()
+        const questionID = parseInt(req.params.idquestion);
+
+        return this.answerRepository.findByQuestion(questionID)
         .then((answers) => {
                 res.json(answers);
          }).catch((error) => super.handleErrors(res, error));
