@@ -45,4 +45,11 @@ export class AnswerController extends BaseController {
             });
         }).catch((error) => super.handleErrors(res, error)); 
     }
+
+    show(req: Request, res: Response) {
+        return this.answerRepository.findAll()
+        .then((answers) => {
+                res.json(answers);
+         }).catch((error) => super.handleErrors(res, error));
+    }
 }

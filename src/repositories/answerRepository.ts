@@ -1,4 +1,5 @@
 import { Answer } from "../models/answer";
+import { User } from "../models/user";
 import { DbClient } from "../persistence/dbClient";
 
 export class AnswerRepository {
@@ -18,5 +19,17 @@ export class AnswerRepository {
             .then(() => resolve(answer))
             .catch(reject);
         });   
+    }
+
+    findAll(): Promise<Array<Answer>> {
+        return this.dbClient.query("SELECT ANSWERS.*, USERS.EMAIL FROM ANSWERS INNER JOIN USERS ON ANSWERS.USER_ID = USERS.ID").then((results) => {
+            const answers: Array<Answer> = [];
+            results.forEach((result: any) => {
+                const user = new User({ id: result.USER_ID, email: result.EMAIL })
+                const answer = new Answer({ description: result.DESCRIPTION, createdAt: result.CREATED_AT, user: user, id: result.ID });
+                answers.push(answer);
+            })
+            return answers;
+        });  
     }
 }

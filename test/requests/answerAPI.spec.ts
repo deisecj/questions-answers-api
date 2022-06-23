@@ -1,11 +1,12 @@
 import request from 'supertest';
 import { expect } from 'chai';
 import { expressApp, resetTables } from "../support/init";
-import { buildAuth, buildExpiredAuth, buildQuestion, buildUser, persistAuth, persistQuestion, persistUser } from "../fixtures";
+import { buildAnswer, buildAuth, buildExpiredAuth, buildQuestion, buildUser, persistAnswer, persistAuth, persistQuestion, persistUser } from "../fixtures";
 import { Question } from "../models/question";
 import { User } from "../models/user";
 import { Authentication } from '../models/authentication';
 import { totalAnswerByUser } from '../support/dbUtils';
+import { Answer } from '../models/answer';
 
 describe('Answer API', () => {
     beforeEach(() => resetTables());
@@ -155,6 +156,59 @@ describe('Answer API', () => {
                     .then((response) => { 
                         expect(response.body).to.deep.equal([ "description is required" ]);
                     });
+                });
+            });
+        });
+    });
+
+    describe('List Answers', () => {
+        describe('send request to list answers', () => {
+            let user: User;
+            let userAnswer: User;
+            let question: Question;
+            let answerList: Array<Answer> = [];
+
+            beforeEach(() => {
+                return persistUser(buildUser()).then((userCreated) => {
+                    user = userCreated;
+                    return user;
+                }).then((user) => {
+                    return persistQuestion(buildQuestion(user)).then((questionCreated) => {
+                        question = questionCreated;
+                        return question;
+                    });
+                }).then(() => {
+                    return persistUser(buildUser()).then((userCreated) => {
+                        userAnswer = userCreated;
+                        return userAnswer;
+                    });
+                }).then((userAnswer) => {
+                    const promiseArrayList: Promise<Answer>[] = [];
+                    for (let i = 0; i < 4; i++) {
+                        const answerCreated = persistAnswer(buildAnswer(userAnswer, question));
+                        promiseArrayList.push(answerCreated);
+                    }
+                    return Promise.all(promiseArrayList).then((answers) => {
+                        answerList = answers;
+                        return answerList;
+                    });
+                });
+            });
+
+            it.only('should returns the answers with description, created date and author', () => {
+                
+                return request(expressApp)
+                .get('/api/' + question.id + '/answers/')
+                .expect('Content-Type', /json/)
+                .expect(200)
+                .then((response) => {
+                    const expectedList = answerList.map((answer) => ({ 
+                        description: answer.description,
+                        createdAt: answer.createdAt.toISOString(),
+                        id: answer.id,
+                        user: { email: answer.user.email, id: answer.user.id }        
+                    }));
+                    expect(response.body).to.deep.equalInAnyOrder(expectedList);
                 });
             });
         });
