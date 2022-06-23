@@ -4,6 +4,7 @@ import { dbClient } from "../support/init";
 import { HashPassword } from "../../src/utils/hashPassword";
 import { Authentication } from "../../src/models/authentication";
 import { Question } from "../../src/models/question";
+import { Answer } from "../../src/models/answer";
 
 export const buildUser = (): User => {
     const user = new User({ email: faker.internet.email(), password: faker.internet.password() });
@@ -54,5 +55,19 @@ export const persistQuestion = (question: Question): Promise<Question> => {
                    .then((out: any) => {
                     question.id = out.insertId;
                        return question;
+                   });
+}
+
+export const buildAnswer = (user: User, question: Question): Answer => {
+    const answer = new Answer({ description: faker.lorem.paragraph(), user: user, question: question });
+    return answer;
+}
+
+export const persistAnswer = (answer: Answer): Promise<Answer> => {
+    return dbClient.query("INSERT INTO ANSWERS (QUESTION_ID, DESCRIPTION, CREATED_AT, USER_ID) VALUES (?, ?, ?, ?)", 
+                          [answer.question.id, answer.description, answer.createdAt, answer.user.id])
+                   .then((out: any) => {
+                    answer.id = out.insertId;
+                       return answer;
                    });
 }

@@ -49,6 +49,10 @@ export const initServer = (): Express => {
         return answerQuestionController.create(req, res);
     });
 
+    app.get('/api/question/:idquestion/answers/', (req: Request, res: Response) => {
+        return answerQuestionController.show(req, res);
+    });
+
     app.get('/api/hello', (req: Request, res: Response) => {
         return helloController.hello(req, res);
     });

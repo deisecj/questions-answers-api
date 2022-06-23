@@ -45,4 +45,13 @@ export class AnswerController extends BaseController {
             });
         }).catch((error) => super.handleErrors(res, error)); 
     }
+
+    show(req: Request, res: Response) {
+        const questionID = parseInt(req.params.idquestion);
+
+        return this.answerRepository.findByQuestion(questionID)
+        .then((answers) => {
+                res.json(answers);
+         }).catch((error) => super.handleErrors(res, error));
+    }
 }
