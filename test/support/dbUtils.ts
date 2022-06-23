@@ -15,3 +15,8 @@ export const totalQuestionByUser = (user: User): Promise<number> => {
     return dbClient.query("SELECT count(*) as total FROM QUESTIONS WHERE USER_ID = ?", user.id)
     .then((result) => result[0].total);
 }
+
+export const totalAnswerByUser = (user: User): Promise<number> => {
+    return dbClient.query("SELECT count(*) as total FROM ANSWERS WHERE USER_ID = ?", user.id)
+    .then((result) => result[0].total);
+}

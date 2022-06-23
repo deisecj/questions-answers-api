@@ -8,6 +8,7 @@ export const dbClient = getClient();
 export const expressApp = initServer();
 
 export const resetTables = async (): Promise<void> => {
+    const answer = await dbClient.query("DELETE FROM ANSWERS");
     const question = await dbClient.query("DELETE FROM QUESTIONS");
     const user = await dbClient.query("DELETE FROM USERS");
     const auth = await dbClient.query("DELETE FROM AUTHENTICATIONS");
